@@ -1,0 +1,11 @@
+.btn {
+  padding: 4px 12px;
+
+  color: teal;
+  font-size: 12px;
+  line-height: 120%;
+
+  background-color: transparent;
+  border: 1px solid teal;
+  cursor: pointer;
+}
