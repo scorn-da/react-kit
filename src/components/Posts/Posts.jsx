@@ -6,8 +6,8 @@ const Posts = ({ title, posts }) => {
       <>
         <h1 style={{textAlign: 'center'}}>{title}</h1>
         {
-          posts.map((post) =>
-              <Post key={post.id} post={post} />
+          posts.map((post, index) =>
+              <Post key={post.id} number={index + 1} post={post} />
           )
         }
       </>
