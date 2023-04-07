@@ -1,23 +1,17 @@
 import React, { useState } from "react";
-import Counter from "src/components/Counter/Counter";
-import ClassCounter from "src/components/Counter/ClassCounter";
 import "src/styles/App.css";
+import Posts from "src/components/Posts/Posts";
 
 function App() {
-  const [value, setValue] = useState('Текст');
+  const [posts, setPosts] = useState([
+    {id: 1, title: 'JavaScript', text: 'JavaScript — ЯП',},
+    {id: 2, title: 'Java', text: 'Java — ЯП',},
+    {id: 3, title: 'Python', text: 'Python — ЯП',},
+  ]);
 
   return (
     <div className="App">
-
-      <p>{value}</p>
-      <input
-          type="text"
-          value={value}
-          onChange={evt => setValue(evt.target.value)}
-      />
-
-      <Counter />
-      <ClassCounter />
+      <Posts title="Список постов" posts={posts} />
     </div>
   );
 }
