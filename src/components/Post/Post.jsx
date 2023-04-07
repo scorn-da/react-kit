@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Post.module.css'
+import Button from "src/components/UI/Button/Button";
 
 const Post = (props) => {
 
@@ -10,7 +11,7 @@ const Post = (props) => {
           <p>{props.post.text}</p>
         </div>
         <div>
-          <button>Удалить</button>
+          <Button>Удалить</Button>
         </div>
       </div>
   );
