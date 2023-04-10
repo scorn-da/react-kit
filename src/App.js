@@ -14,10 +14,14 @@ function App() {
     setPosts([...posts, newPost]);
   }
 
+  function removePost(post) {
+    setPosts(posts.filter((p) => p.id !== post.id));
+  }
+
   return (
     <div className="App">
       <PostForm create={createPost} />
-      <Posts title="Список постов" posts={posts} />
+      <Posts remove={removePost} title="Список постов" posts={posts} />
     </div>
   );
 }

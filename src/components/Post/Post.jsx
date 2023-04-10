@@ -11,7 +11,7 @@ const Post = (props) => {
           <p>{props.post.text}</p>
         </div>
         <div>
-          <Button>Удалить</Button>
+          <Button onClick={() => props.remove(props.post)}>Удалить</Button>
         </div>
       </div>
   );
