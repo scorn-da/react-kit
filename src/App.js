@@ -9,9 +9,9 @@ import { usePosts } from "src/hooks/usePosts";
 
 function App() {
   const [posts, setPosts] = useState([
-    {id: 1, title: 'JavaScript', text: 'JavaScript — ЯП',},
-    {id: 2, title: 'Java', text: 'Java — ЯП',},
-    {id: 3, title: 'Python', text: 'Python — ЯП',},
+    {id: 1, title: 'JavaScript', body: 'JavaScript — ЯП',},
+    {id: 2, title: 'Java', body: 'Java — ЯП',},
+    {id: 3, title: 'Python', body: 'Python — ЯП',},
   ]);
   const [filter, setFilter] = useState({
     sort: '',

@@ -8,7 +8,7 @@ const Post = (props) => {
       <div key={props.post.id} className={styles.post}>
         <div>
           <b>{props.post.id} {props.post.title}</b>
-          <p>{props.post.text}</p>
+          <p>{props.post.body}</p>
         </div>
         <div>
           <Button onClick={() => props.remove(props.post)}>Удалить</Button>

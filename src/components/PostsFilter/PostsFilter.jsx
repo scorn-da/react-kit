@@ -20,7 +20,7 @@ const PostsFilter = ({ filter, setFilter }) => {
                 name: 'По названию',
               },
               {
-                value: 'text',
+                value: 'body',
                 name: 'По описанию',
               },
             ]}
