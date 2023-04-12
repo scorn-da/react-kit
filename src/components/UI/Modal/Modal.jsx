@@ -5,7 +5,9 @@ import cn from "classnames";
 const Modal = ({children, isActive}) => {
   return (
       <section className={cn(styles.modal, {[styles.active]: !!isActive})}>
-        <div className={styles.content}></div>
+        <div className={styles.content}>
+          {children}
+        </div>
       </section>
   );
 };
