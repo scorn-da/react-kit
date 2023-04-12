@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import "src/styles/App.css";
 import Posts from "src/components/Posts/Posts";
 import PostForm from "src/components/PostForm/PostForm";
