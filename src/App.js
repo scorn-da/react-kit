@@ -4,6 +4,7 @@ import Posts from "src/components/Posts/Posts";
 import PostForm from "src/components/PostForm/PostForm";
 import PostsFilter from "src/components/PostsFilter/PostsFilter";
 import ModalWithOverlay from "src/components/UI/Modal/ModalWithOverlay/ModalWithOverlay";
+import Button from "src/components/UI/Button/Button";
 
 function App() {
   const [posts, setPosts] = useState([
@@ -15,6 +16,7 @@ function App() {
     sort: '',
     query: '',
   });
+  const [isModalActive, setIsModalActive] = useState(false);
 
   const sortedPosts = useMemo(() => {
     if(filter.sort) {
@@ -29,6 +31,7 @@ function App() {
 
   function createPost(newPost) {
     setPosts([...posts, newPost]);
+    setIsModalActive(false);
   }
 
   function removePost(post) {
@@ -38,11 +41,12 @@ function App() {
   return (
     <div className="App">
       <hr style={{margin: '12px 0'}} />
-      <ModalWithOverlay isActive={true}>
-        <PostForm create={createPost} />
-      </ModalWithOverlay>
       <PostsFilter filter={filter} setFilter={setFilter} />
       <Posts remove={removePost} title="Список постов" posts={sortedAndSearchedPosts} />
+      <Button style={{margin: '12px 0'}} onClick={() => setIsModalActive(true)}>Создать пост</Button>
+      <ModalWithOverlay isActive={isModalActive} setIsActive={setIsModalActive}>
+        <PostForm create={createPost} />
+      </ModalWithOverlay>
     </div>
   );
 }
