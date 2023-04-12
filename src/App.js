@@ -3,6 +3,7 @@ import "src/styles/App.css";
 import Posts from "src/components/Posts/Posts";
 import PostForm from "src/components/PostForm/PostForm";
 import PostsFilter from "src/components/PostsFilter/PostsFilter";
+import ModalWithOverlay from "src/components/UI/Modal/ModalWithOverlay/ModalWithOverlay";
 
 function App() {
   const [posts, setPosts] = useState([
@@ -36,8 +37,10 @@ function App() {
 
   return (
     <div className="App">
-      <PostForm create={createPost} />
       <hr style={{margin: '12px 0'}} />
+      <ModalWithOverlay isActive={true}>
+        <PostForm create={createPost} />
+      </ModalWithOverlay>
       <PostsFilter filter={filter} setFilter={setFilter} />
       <Posts remove={removePost} title="Список постов" posts={sortedAndSearchedPosts} />
     </div>
