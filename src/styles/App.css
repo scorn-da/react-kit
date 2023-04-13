@@ -28,3 +28,21 @@ body {
   transform: translateX(-200px);
   transition: all 200ms ease-out;
 }
+
+.pagination {
+  display: flex;
+  margin: 0 -6px;
+  padding: 0;
+  list-style: none;
+}
+
+.pagination li {
+  padding: 0 12px;
+  margin: 0 -6px;
+}
+
+.page.active {
+  font-weight: 700;
+
+  box-shadow: inset 0 0 0 1px teal;
+}

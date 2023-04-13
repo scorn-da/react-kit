@@ -8,6 +8,9 @@ import Button from "src/components/UI/Button/Button";
 import { usePosts } from "src/hooks/usePosts";
 import PostService from "src/api/PostService";
 import Loader from "src/components/UI/Loader/Loader";
+import { useFetching } from "src/hooks/useFetching";
+import { getPageCount } from "src/utils/pages";
+import { usePagination } from "src/hooks/usePagination";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -16,19 +19,22 @@ function App() {
     query: '',
   });
   const [isModalActive, setIsModalActive] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const [fetchPosts, isLoading, postsFetchingErr] = useFetching(async (limit, page) => {
+    const res = await PostService.getAll(limit, page);
+    setPosts(res.data);
+    const totalCount = res.headers['x-total-count'];
+    setTotalPages(getPageCount(totalCount, limit))
+  });
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  const pagesArray = usePagination(totalPages);
 
-  async function fetchPosts() {
-    setIsLoading(true);
-    const posts = await PostService.getAll();
-    setPosts(posts);
-    setIsLoading(false);
-  }
+  useEffect(() => {
+    fetchPosts(limit, page);
+  }, []);
 
   function createPost(newPost) {
     setPosts([...posts, newPost]);
@@ -37,6 +43,11 @@ function App() {
 
   function removePost(post) {
     setPosts(posts.filter((p) => p.id !== post.id));
+  }
+
+  function changePage(page) {
+    setPage(page);
+    fetchPosts(limit, page);
   }
 
   return (
@@ -48,10 +59,30 @@ function App() {
             ? <Loader />
             : <Posts remove={removePost} title="Список постов" posts={sortedAndSearchedPosts} />
       }
+      {
+        postsFetchingErr &&
+        <h2 style={{textAlign: 'center'}}>Произошла ошибка: {postsFetchingErr}</h2>
+      }
       <Button style={{margin: '12px 0'}} onClick={() => setIsModalActive(true)}>Создать пост</Button>
       <ModalWithOverlay isActive={isModalActive} setIsActive={setIsModalActive}>
         <PostForm create={createPost} />
       </ModalWithOverlay>
+      <ul className="pagination">
+        {
+          pagesArray.map((p) => {
+            return(
+                <li key={p}>
+                  <Button
+                      className={p === page ? 'page active' : 'page'}
+                      onClick={() => changePage(p)}
+                  >
+                    {p}
+                  </Button>
+                </li>
+            );
+          })
+        }
+      </ul>
     </div>
   );
 }
