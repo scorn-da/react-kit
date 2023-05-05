@@ -11,6 +11,12 @@ body {
   padding: 0;
 }
 
+#root {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
 .App {
   padding: 12px;
 }
