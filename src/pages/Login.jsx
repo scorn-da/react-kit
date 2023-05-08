@@ -9,6 +9,7 @@ const Login = () => {
   function login(evt) {
     evt.preventDefault();
     setIsAuthed(true);
+    localStorage.setItem('auth', 'true');
   }
 
   return (

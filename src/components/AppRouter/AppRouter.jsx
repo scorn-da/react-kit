@@ -2,9 +2,14 @@ import React, { useContext } from 'react';
 import { Route, Routes } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "src/router";
 import { AuthContext } from "src/context";
+import Loader from "src/components/UI/Loader/Loader";
 
 const AppRouter = () => {
-  const { isAuthed, setIsAuthed } = useContext(AuthContext);
+  const { isAuthed, setIsAuthed, isLoading } = useContext(AuthContext);
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   function getRenderElement(component) {
     const Element = component;
