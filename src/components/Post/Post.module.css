@@ -1,9 +1,18 @@
 .post {
-  display: flex;
+  display: grid;
   align-items: center;
-  justify-content: space-between;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 12px;
   margin: 12px 0 0;
   padding: 12px;
 
   border: 2px solid teal;
+}
+
+.buttons {
+  display: grid;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
 }
