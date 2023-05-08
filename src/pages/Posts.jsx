@@ -12,7 +12,7 @@ import { getPageCount } from "src/utils/pages";
 import Pagination from "src/components/UI/Pagination/Pagination";
 import PostService from "src/api/PostService";
 
-function PostsPage() {
+const PostsPage = () => {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({
     sort: '',
