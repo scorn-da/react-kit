@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Routes } from "react-router-dom";
-import { routes } from "src/router";
+import { privateRoutes, publicRoutes } from "src/router";
+import { AuthContext } from "src/context";
 
 const AppRouter = () => {
-  function getRenderElement (component) {
+  const { isAuthed, setIsAuthed } = useContext(AuthContext);
+
+  function getRenderElement(component) {
     const Element = component;
     return <Element />
   }
 
   return (
-      <Routes>
-        {routes.map((route) =>
-            route.index
-                ? <Route index element={getRenderElement(route.element)} key={route.path} />
-                : <Route path={route.path} element={getRenderElement(route.element)} key={route.path} />
-        )}
-      </Routes>
+      <>
+        {
+          isAuthed
+              ? <Routes>
+                  {privateRoutes.map((route) =>
+                      route.index
+                          ? <Route index element={getRenderElement(route.element)} key={route.path} />
+                          : <Route path={route.path} element={getRenderElement(route.element)} key={route.path} />
+                  )}
+                </Routes>
+              : <Routes>
+                {publicRoutes.map((route) =>
+                    route.index
+                        ? <Route index element={getRenderElement(route.element)} key={route.path} />
+                        : <Route path={route.path} element={getRenderElement(route.element)} key={route.path} />
+                )}
+              </Routes>
+        }
+      </>
   );
 };
 
