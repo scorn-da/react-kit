@@ -1,15 +1,20 @@
 import React from 'react';
 import { Route, Routes } from "react-router-dom";
-import About from "src/pages/About";
-import PostsPage from "src/pages/Posts";
-import Error from "src/pages/Error";
+import { routes } from "src/router";
 
 const AppRouter = () => {
+  function getRenderElement (component) {
+    const Element = component;
+    return <Element />
+  }
+
   return (
       <Routes>
-        <Route path="/about" element={<About />} />
-        <Route path="/posts" element={<PostsPage />} />
-        <Route path="*" element={<Error />} />
+        {routes.map((route) =>
+            route.index
+                ? <Route index element={getRenderElement(route.element)} key={route.path} />
+                : <Route path={route.path} element={getRenderElement(route.element)} key={route.path} />
+        )}
       </Routes>
   );
 };
