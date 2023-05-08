@@ -11,6 +11,8 @@ import { useFetching } from "src/hooks/useFetching";
 import { getPageCount } from "src/utils/pages";
 import Pagination from "src/components/UI/Pagination/Pagination";
 import PostService from "src/api/PostService";
+import { useObserver } from "src/hooks/useObserver";
+import Select from "src/components/UI/Select/Select";
 
 const PostsPage = () => {
   const [posts, setPosts] = useState([]);
@@ -30,23 +32,14 @@ const PostsPage = () => {
   });
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
   const lastElement = useRef();
-  const observer = useRef();
 
-  useEffect(() => {
-    if (isLoading) return;
-    if (observer.current) observer.current.disconnect();
-    const callback = (entries, observer) => {
-      if (entries[0].isIntersecting && page < totalPages) {
-        setPage(page + 1);
-      }
-    };
-    observer.current = new IntersectionObserver(callback);
-    observer.current.observe(lastElement.current);
-  }, [isLoading]);
+  useObserver(lastElement, isLoading, page < totalPages, () => {
+    setPage(page + 1);
+  });
 
   useEffect(() => {
     fetchPosts(limit, page);
-  }, [page]);
+  }, [page, limit]);
 
   function createPost(newPost) {
     setPosts([...posts, newPost]);
@@ -65,13 +58,22 @@ const PostsPage = () => {
       <div className="App">
         <hr style={{margin: '12px 0'}} />
         <PostsFilter filter={filter} setFilter={setFilter} />
+        <Select
+            value={limit}
+            onChange={(value) => setLimit(value)}
+            defaultValue="Кол-во элементов на странице"
+            options={[
+              {value: 5, name: '5'},
+              {value: 10, name: '10'},
+              {value: 25, name: '25'},
+              {value: -1, name: 'Показать все'},
+            ]}
+        />
         {
           isLoading && <Loader />
         }
         <Posts remove={removePost} title="Список постов" posts={sortedAndSearchedPosts} />
-        <div ref={lastElement} style={{height: '20px', background: 'red'}}>
-
-        </div>
+        <div ref={lastElement} />
         {
           postsFetchingErr &&
           <h2 style={{textAlign: 'center'}}>Произошла ошибка: {postsFetchingErr}</h2>
