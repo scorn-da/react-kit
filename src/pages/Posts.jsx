@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "src/styles/App.css";
 import Posts from "src/components/Posts/Posts";
 import PostForm from "src/components/PostForm/PostForm";
@@ -24,15 +24,29 @@ const PostsPage = () => {
   const [page, setPage] = useState(1);
   const [fetchPosts, isLoading, postsFetchingErr] = useFetching(async (limit, page) => {
     const res = await PostService.getAll(limit, page);
-    setPosts(res.data);
+    setPosts([...posts, ...res.data]);
     const totalCount = res.headers['x-total-count'];
     setTotalPages(getPageCount(totalCount, limit))
   });
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+  const lastElement = useRef();
+  const observer = useRef();
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && page < totalPages) {
+        setPage(page + 1);
+      }
+    };
+    observer.current = new IntersectionObserver(callback);
+    observer.current.observe(lastElement.current);
+  }, [isLoading]);
 
   useEffect(() => {
     fetchPosts(limit, page);
-  }, []);
+  }, [page]);
 
   function createPost(newPost) {
     setPosts([...posts, newPost]);
@@ -45,7 +59,6 @@ const PostsPage = () => {
 
   function changePage(page) {
     setPage(page);
-    fetchPosts(limit, page);
   }
 
   return (
@@ -53,10 +66,12 @@ const PostsPage = () => {
         <hr style={{margin: '12px 0'}} />
         <PostsFilter filter={filter} setFilter={setFilter} />
         {
-          isLoading
-              ? <Loader />
-              : <Posts remove={removePost} title="Список постов" posts={sortedAndSearchedPosts} />
+          isLoading && <Loader />
         }
+        <Posts remove={removePost} title="Список постов" posts={sortedAndSearchedPosts} />
+        <div ref={lastElement} style={{height: '20px', background: 'red'}}>
+
+        </div>
         {
           postsFetchingErr &&
           <h2 style={{textAlign: 'center'}}>Произошла ошибка: {postsFetchingErr}</h2>
